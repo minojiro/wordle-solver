@@ -8,7 +8,9 @@ describe("wordle", () => {
     wordle.set("relit", ["P", "C", "A", "A", "A"]);
     wordle.set("demur", ["A", "C", "A", "A", "P"]);
     wordle.set("henry", ["A", "C", "A", "P", "C"]);
-    expect(wordle.suggest()).toBe("perky");
+    const suggest = wordle.suggest();
+    console.log(suggest);
+    expect(suggest).toBe("perky");
   });
 
   it("skip", () => {
