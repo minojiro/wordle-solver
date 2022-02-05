@@ -1,66 +1,36 @@
-import { RAW_WORDS } from "./words";
+import { game } from "./game";
 
-const ANSWER_CHAR_COUNT = 5;
-
-const letterCount = RAW_WORDS.reduce((letterCount, word) => {
-  word.split("").forEach((c) => (letterCount[c] = (letterCount[c] || 0) + 1));
-  return letterCount;
-}, {});
-
-const scoreWord = (s: string) => {
-  const charSet = new Set(s.split(""));
-  return Array.from(charSet).reduce(
-    (sum, char) => (sum += letterCount[char] + 20000),
-    0
+if (process.env.NODE_ENV !== "test") {
+  const { getSuggest, userInput, checkIsDone } = game();
+  const reader = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  console.log(
+    [
+      "-----",
+      "0: 単語に含まれない (黒)",
+      "1: 単語に含まれるが位置が違う (黄)",
+      "2: 合っている (緑)",
+      "例: 提案された単語を入力して、黒黄黒緑緑と返ってきた場合、 01022 と入力",
+      "または単語がなかった場合は '-' と入力",
+      "-----",
+      `提案: ${getSuggest()}`,
+    ].join("\n")
   );
-};
-
-export const words = RAW_WORDS.sort((a, b) => scoreWord(b) - scoreWord(a));
-
-const allAlp = "abcdefghijklmnopqrstuvwxyz".split("");
-type ResultCell = "A" | "P" | "C";
-
-export function Wordle() {
-  let possibleChars: string[][] = Array(ANSWER_CHAR_COUNT).fill(allAlp);
-  const presentLetters = new Set<string>();
-  const noMatchWords = new Set<string>();
-
-  const set = (word: string, result: ResultCell[] | null) => {
-    if (!result) {
-      noMatchWords.add(word);
-      return;
+  reader.on("line", (line: string) => {
+    try {
+      userInput(line);
+    } catch (e: any) {
+      console.error(e.message);
     }
-    const wordArr = word.split("");
-    result.forEach((r, i) => {
-      const char = wordArr[i];
-      if (r === "C") {
-        possibleChars[i] = [char];
-      } else if (r === "P") {
-        presentLetters.add(char);
-        possibleChars[i] = possibleChars[i].filter((c) => c !== char);
-      } else {
-        if (presentLetters.has(char)) return;
-        possibleChars = possibleChars.map((cs) => cs.filter((c) => c !== char));
-      }
-    });
-  };
-
-  const suggest = () => {
-    const presentCharsArr = Array.from(presentLetters);
-    return words.find((word) => {
-      if (noMatchWords.has(word)) {
-        return false;
-      }
-      const chars = word.split("");
-      if (
-        presentCharsArr.length &&
-        presentCharsArr.some((letter) => !chars.includes(letter))
-      ) {
-        return false;
-      }
-      return chars.every((c, i) => possibleChars[i].includes(c));
-    });
-  };
-
-  return { suggest, set };
+    if (checkIsDone()) {
+      console.log("\n🎉 congratulations!!");
+      process.exit(0);
+    }
+    console.log(`\n-----\n提案: ${getSuggest()}`);
+  });
+  reader.on("close", () => {
+    console.log("bye");
+  });
 }

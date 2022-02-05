@@ -1,5 +1,4 @@
-export const RAW_WORDS = [
-  "aaron",
+const RAW_WORDS = [
   "aback",
   "abaft",
   "abase",
@@ -4265,3 +4264,20 @@ export const RAW_WORDS = [
   "zooms",
   "zulus",
 ];
+
+const charCount = RAW_WORDS.reduce((charCount: any, word) => {
+  word.split("").forEach((c) => (charCount[c] = (charCount[c] || 0) + 1));
+  return charCount;
+}, {});
+
+const scoreWord = (s: string) => {
+  const charSet = new Set(s.split(""));
+  return Array.from(charSet).reduce(
+    (sum, char) => (sum += charCount[char] + 99999),
+    0
+  );
+};
+
+const WORDS = RAW_WORDS.sort((a, b) => scoreWord(b) - scoreWord(a));
+
+export { WORDS };

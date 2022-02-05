@@ -1,16 +1,10 @@
-# Wordle Solver
+# Wordle solver
 
-## Usage
+[Wordle](https://www.powerlanguage.co.uk/wordle/) を解きます。
 
-### Install packages.
-
-```
-npm install
-```
-
-### Solve
+## 使い方
 
 ```
-edit `src/index.spec.ts`
-npm run test
+npm i
+npm run exec
 ```
