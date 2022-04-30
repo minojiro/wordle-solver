@@ -8,6 +8,9 @@
     "dev": "node --require esbuild-register ./src/main.ts",
     "test": "vitest run"
   },
+  "bin": {
+    "wordle-solver": "./main.js"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
