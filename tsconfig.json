@@ -1,11 +1,11 @@
 {
+  
   "compilerOptions": {
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "target": "esnext",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-  },
+    "lib": [
+      "es2018",
+    ]
+  }
 }

@@ -1,10 +1,8 @@
-# Wordle solver
+# Wordle Solver
 
-[Wordle](https://www.powerlanguage.co.uk/wordle/) を解きます。
-
-## 使い方
+## Usage
 
 ```
-npm i
-npm run exec
+pnpm install
+pnpm run dev
 ```
